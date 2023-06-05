@@ -23,11 +23,19 @@
         <div class="row">
 
             <div class="form-group col-md-6 mb-3">
-                <label class="text-center text-white font-weight-bold" for="model">Model</label>
-                <select id="model" class="form-control">
+                <label class="text-center text-white font-weight-bold" for="modelId">Model</label>
+                <select id="modelId" name="modelId" class="form-control"
+                        th:errorclass="is-invalid">
                     <option value="">- Select a model -</option>
-                    <optgroup label="Brand name">
-                        <option>Model</option>
+                    <optgroup label="Brand name"
+                              th:each="brand : ${brands}" th:label="${brand.name}">
+                        <option
+                                th:each="model :${brand.models}"
+                                th:label="${model.name}"
+                                th:value="${model.id}"
+                                th:selected="${model.id} == *{modelId}">
+                            Model
+                        </option>
                     </optgroup>
                 </select>
                 <p class="invalid-feedback errors alert alert-danger">

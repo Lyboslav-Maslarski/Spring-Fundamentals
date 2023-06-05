@@ -55,7 +55,10 @@ public class UserService {
     }
 
     private void login(User user) {
-        this.currentUser.setLoggedIn(true).setName(user.getFirstName() + " " + user.getLastName())
+        this.currentUser
+                .setLoggedIn(true)
+                .setName(user.getFirstName() + " " + user.getLastName())
+                .setEmail(user.getEmail())
                 .setAdmin(user.getRoles().stream().anyMatch(role -> role.getRole().equals(RoleEnum.ADMIN)));
     }
 

@@ -9,9 +9,17 @@ public class CurrentUser {
 
     private String name;
 
+    private String email;
+
     private boolean loggedIn;
 
     private boolean isAdmin;
+
+    public void clear() {
+        this.loggedIn = false;
+        this.name = null;
+        this.email = null;
+    }
 
     public String getName() {
         return name;
@@ -31,11 +39,6 @@ public class CurrentUser {
         return this;
     }
 
-    public void clear() {
-        this.loggedIn = false;
-        this.name = null;
-    }
-
     public boolean isAnonymous() {
         return !loggedIn;
     }
@@ -46,6 +49,15 @@ public class CurrentUser {
 
     public CurrentUser setAdmin(boolean admin) {
         isAdmin = admin;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public CurrentUser setEmail(String email) {
+        this.email = email;
         return this;
     }
 }
