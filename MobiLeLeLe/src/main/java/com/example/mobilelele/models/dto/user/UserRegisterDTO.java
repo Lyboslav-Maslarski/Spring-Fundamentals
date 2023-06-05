@@ -1,21 +1,26 @@
 package com.example.mobilelele.models.dto.user;
 
+import com.example.mobilelele.models.validations.FieldMatch;
+import com.example.mobilelele.models.validations.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+@FieldMatch(first = "password", second = "confirmPassword",
+        message = "Password and confirmPassword must match.")
 public class UserRegisterDTO {
 
     @NotEmpty
-    @Size(min = 2,max = 20)
+    @Size(min = 2, max = 20)
     private String firstName;
 
     @NotEmpty
-    @Size(min = 2,max = 20)
+    @Size(min = 2, max = 20)
     private String lastName;
 
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "User email should be provided.")
+    @Email(message = "User email should be valid.")
+    @UniqueEmail(message = "User email should be unique.")
     private String email;
     @NotEmpty
     @Size(min = 5)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -46,9 +46,11 @@
                 <input id="email" name="email" type="text" class="form-control"
                        th:field="*{email}" th:errorclass="is-invalid"
                        placeholder="Email"/>
-                <p class="invalid-feedback errors alert alert-danger">
+                <div class="invalid-feedback errors alert alert-danger"
+                     th:each="error : ${#fields.errors('email')}"
+                     th:text="${error}">
                     Email is required.
-                </p>
+                </div>
             </div>
             <div class="form-group col-md-6 mb-3">
                 <label for="password" class="text-white font-weight-bold">Password</label>
@@ -56,15 +58,16 @@
                        th:field="*{password}" th:errorclass="is-invalid"
                        placeholder="Password"/>
                 <p class="invalid-feedback errors alert alert-danger">
-                    Password is required  and should be at least 5 symbols.
+                    Password is required and should be at least 5 symbols.
                 </p>
             </div>
         </div>
         <div class="form-group">
             <label for="confirmPassword" class="text-white font-weight-bold">Confirm Password</label>
-            <input id="confirmPassword" name="confirmPassword" type="password" min="2" max="20" class="form-control"
+            <input id="confirmPassword" name="confirmPassword" type="password" class="form-control"
+                   th:field="*{confirmPassword}" th:errorclass="is-invalid"
                    placeholder="Confirm Password"/>
-            <p class="errors alert alert-danger">
+            <p class="invalid-feedback errors alert alert-danger">
                 Password should match.
             </p>
         </div>

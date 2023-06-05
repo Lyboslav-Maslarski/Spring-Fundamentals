@@ -1,5 +1,6 @@
 package com.example.mobilelele.services;
 
+import com.example.mobilelele.models.mapper.UserMapper;
 import com.example.mobilelele.models.dto.user.UserLoginDTO;
 import com.example.mobilelele.models.dto.user.UserRegisterDTO;
 import com.example.mobilelele.models.entity.User;
@@ -21,11 +22,15 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final UserMapper userMapper;
+
     @Autowired
-    public UserService(UserRepository userRepository, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, CurrentUser currentUser,
+                       PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.currentUser = currentUser;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     public boolean login(UserLoginDTO userLoginDTO) {
@@ -59,12 +64,8 @@ public class UserService {
     }
 
     public void registerAndLogin(UserRegisterDTO userRegisterDTO) {
-        User newUser = new User()
-                .setActive(true)
-                .setEmail(userRegisterDTO.getEmail())
-                .setFirstName(userRegisterDTO.getFirstName())
-                .setLastName(userRegisterDTO.getLastName())
-                .setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+        User newUser = userMapper.userDTOToUser(userRegisterDTO);
+        newUser.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
 
         userRepository.save(newUser);
 
