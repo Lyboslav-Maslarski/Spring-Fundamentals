@@ -1,6 +1,7 @@
 package com.example.battleships.services;
 
 import com.example.battleships.models.dtos.CreateShipDTO;
+import com.example.battleships.models.dtos.ShipDTO;
 import com.example.battleships.models.entities.Category;
 import com.example.battleships.models.entities.Ship;
 import com.example.battleships.models.entities.User;
@@ -13,7 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipService {
@@ -59,5 +62,23 @@ public class ShipService {
 
         shipRepository.save(ship);
         return true;
+    }
+
+    public List<ShipDTO> getShipsOwnedBy(Long loggedUserId) {
+        return shipRepository.findByUserId(loggedUserId)
+                .stream().map(ship -> modelMapper.map(ship, ShipDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ShipDTO> getEnemyShips(Long loggedUserId) {
+        return shipRepository.findByUserIdNot(loggedUserId)
+                .stream().map(ship -> modelMapper.map(ship, ShipDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ShipDTO> getAllShips() {
+        return shipRepository.findAllByOrderByNameAscHealthAscPowerAsc()
+                .stream().map(ship -> modelMapper.map(ship, ShipDTO.class))
+                .collect(Collectors.toList());
     }
 }

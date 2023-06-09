@@ -25,7 +25,7 @@ public class Ship {
     @ManyToOne
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     public Ship() {
