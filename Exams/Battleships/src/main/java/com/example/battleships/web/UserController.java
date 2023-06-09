@@ -35,6 +35,10 @@ public class UserController {
 
     @GetMapping("/register")
     public String register() {
+        if (!this.userService.hasNoLoggedUser()) {
+            return "redirect:/home";
+        }
+
         return "register";
     }
 
@@ -42,6 +46,10 @@ public class UserController {
     public String register(@Valid UserRegistrationDTO userRegistrationDTO,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
+        if (!this.userService.hasNoLoggedUser()) {
+            return "redirect:/home";
+        }
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userRegistrationDTO", userRegistrationDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegistrationDTO",
@@ -50,13 +58,17 @@ public class UserController {
             return "redirect:/users/register";
         }
 
-        userService.register(userRegistrationDTO);
+        this.userService.register(userRegistrationDTO);
 
         return "redirect:/users/login";
     }
 
     @GetMapping("/login")
     public String login() {
+        if (!this.userService.hasNoLoggedUser()) {
+            return "redirect:/home";
+        }
+
         return "/login";
     }
 
@@ -64,6 +76,10 @@ public class UserController {
     public String login(@Valid LoginDTO loginDTO,
                         BindingResult bindingResult,
                         RedirectAttributes redirectAttributes) {
+        if (!this.userService.hasNoLoggedUser()) {
+            return "redirect:/home";
+        }
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.loginDTO",
@@ -72,7 +88,7 @@ public class UserController {
             return "redirect:/users/login";
         }
 
-        if (!userService.login(loginDTO)) {
+        if (!this.userService.login(loginDTO)) {
             redirectAttributes.addFlashAttribute("loginDTO", loginDTO);
             redirectAttributes.addFlashAttribute("badCredentials", true);
 
@@ -80,5 +96,14 @@ public class UserController {
         }
 
         return "redirect:/home";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        if (this.userService.hasNoLoggedUser()) {
+            return "redirect:/";
+        }
+        this.userService.logoutUser();
+        return "redirect:/index";
     }
 }

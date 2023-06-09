@@ -15,6 +15,7 @@ import java.util.Optional;
 public class UserService {
 
     private final ModelMapper modelMapper;
+
     private final UserRepository userRepository;
 
     private final CurrentUser currentUser;
@@ -41,5 +42,17 @@ public class UserService {
         currentUser.login(user.get());
 
         return true;
+    }
+
+    public void logoutUser() {
+        currentUser.logout();
+    }
+
+    public boolean hasNoLoggedUser() {
+        return currentUser.getId() == null;
+    }
+
+    public Long getLoggedUserId() {
+        return currentUser.getId();
     }
 }
